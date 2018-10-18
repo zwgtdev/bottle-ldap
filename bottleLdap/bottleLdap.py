@@ -1,8 +1,8 @@
-import bottle
-import ldap
 import sys
 import os
 import json
+import ldap
+import bottle
 from collections import OrderedDict
 
 
