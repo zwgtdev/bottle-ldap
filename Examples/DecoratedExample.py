@@ -3,7 +3,10 @@ import json
 import bottle
 from beaker.middleware import SessionMiddleware
 from bottleLdap import Auth
-from SampleSettings import LDAP_SERVER, LDAP_DOMAIN, LDAP_SEARCH, SESSION_KEY, ROLE_LIST, BIND_HOST, BIND_PORT
+from SampleSettings import (
+    LDAP_SERVER, LDAP_DOMAIN, LDAP_SEARCH, SESSION_KEY, ROLE_LIST,
+    BIND_HOST, BIND_PORT)
+
 
 # Initialize the Auth class with our LDAP settings
 auth = Auth(ldap_server=LDAP_SERVER, ldap_domain=LDAP_DOMAIN,
@@ -11,7 +14,8 @@ auth = Auth(ldap_server=LDAP_SERVER, ldap_domain=LDAP_DOMAIN,
 
 
 # alias the authorization decorator with defaults
-authorize = auth.make_auth_decorator(fail_redirect="/login", role="admin")  # You probably don't want your default role to be admin...
+# You probably don't want your default role to be admin...
+authorize = auth.make_auth_decorator(fail_redirect="/login", role="admin")
 
 # Setup the application with session options
 app = bottle.app()
@@ -56,6 +60,7 @@ def logout():
 @authorize(fail_redirect='/login')
 def access_denied():
     return {}
+
 
 # Admin-only pages
 @bottle.route('/admin')
@@ -105,9 +110,8 @@ def get_resource(route, file):
 def index():
     return {'short_name': auth.current_user.short_name}
 
+
 # #  Web application main  # #
-
-
 def main():
     bottle.debug(True)
     bottle.run(app=app, quiet=False, reloader=False,
